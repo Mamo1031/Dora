@@ -36,29 +36,7 @@ Run the following command in the project root:
 uv sync --all-extras
 ```
 
-This will install the following main dependencies:
-- `langchain`: For building LLM chains
-- `langchain-community`: Community integrations (e.g., Ollama)
-- `sentence-transformers`: For document vectorization
-- `chromadb`: Vector database
-
-And development dependencies:
-- `pytest`: Testing framework
-- `pytest-cov`: Coverage plugin for pytest
-- `ruff`: Fast Python linter and formatter
-- `mypy`: Static type checker
-- `pydoclint`: Docstring linter
-- `poethepoet`: Task runner
-
 ### 3. Activate Virtual Environment
-
-uv automatically manages the virtual environment. When running scripts:
-
-```bash
-uv run python your_script.py
-```
-
-Alternatively, to activate the virtual environment directly in your shell:
 
 ```bash
 source .venv/bin/activate  # Linux/Mac
@@ -94,33 +72,13 @@ This will:
 - Run a test prompt
 - Display the generated response
 
-Alternatively, you can use it with `uv run`:
-
-```bash
-uv run dora-test
-```
-
 ## Development
 
-### Running Tests
-
-Run tests with pytest:
-
 ```bash
-# Run all tests
-uv run pytest
-```
+# Run tests
+uv run poe test
 
-### Code Quality Checks
-
-```bash
-# Lint and format with Ruff
-uv run poe lint-ruff
-
-# Type checking with MyPy
-uv run poe lint-mypy
-
-# Run all linting
+# Run linting
 uv run poe lint
 ```
 
@@ -132,11 +90,11 @@ Dora/
 │   └── dora/          # Main package
 │       ├── __init__.py
 │       ├── llm.py     # LocalLLM implementation
-│       └── cli.py      # CLI interface
+│       └── cli.py     # CLI interface
 ├── tests/             # Test files
 │   ├── __init__.py
 │   └── test_llm.py    # LLM tests
-├── pyproject.toml      # Project configuration
+├── pyproject.toml     # Project configuration
 ├── uv.lock            # Dependency lock file
 ├── .gitignore         # Git ignore rules
 └── README.md
