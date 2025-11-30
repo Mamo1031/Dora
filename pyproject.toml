@@ -25,6 +25,7 @@ dev = [
 
 [project.scripts]
 dora-test = "dora.cli:run_test_llm"
+dora = "dora.cli:interactive"
 
 [build-system]
 requires = ["hatchling"]

@@ -32,3 +32,43 @@ def run_test_llm() -> None:
     except RuntimeError as e:
         print(f"✗ Error generating response: {e}")  # noqa: T201
         sys.exit(1)
+
+
+def interactive() -> None:
+    """Interactive CLI for chatting with the local LLM."""
+    print("Initializing Local LLM with Llama 3.2 (3B)...")  # noqa: T201
+    try:
+        llm = LocalLLM(model_name="llama3.2")
+        print("✓ LLM initialized successfully\n")  # noqa: T201
+    except ConnectionError as e:
+        print(f"✗ Error: {e}")  # noqa: T201
+        print("\nPlease ensure:")  # noqa: T201
+        print("  1. Ollama is installed and running")  # noqa: T201
+        print("  2. Llama 3.2 model is pulled: ollama pull llama3.2")  # noqa: T201
+        sys.exit(1)
+
+    print("Interactive mode started. Type 'exit' or 'quit' to end the session.\n")  # noqa: T201
+
+    while True:
+        try:
+            prompt = input("You: ").strip()
+            if not prompt:
+                continue
+
+            if prompt.lower() in {"exit", "quit"}:
+                print("\nGoodbye!")  # noqa: T201
+                break
+
+            print("Generating response...")  # noqa: T201
+            try:
+                response = llm.invoke(prompt)
+                print(f"Assistant: {response}\n")  # noqa: T201
+            except RuntimeError as e:
+                print(f"✗ Error generating response: {e}\n")  # noqa: T201
+
+        except KeyboardInterrupt:
+            print("\n\nGoodbye!")  # noqa: T201
+            break
+        except EOFError:
+            print("\n\nGoodbye!")  # noqa: T201
+            break

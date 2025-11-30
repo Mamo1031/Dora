@@ -80,6 +80,21 @@ This will:
 - Run a test prompt
 - Display the generated response
 
+### Interactive Mode
+
+Start an interactive chat session with the LLM:
+
+```bash
+dora
+```
+
+This will:
+- Initialize the LocalLLM with Llama 3.2 (3B)
+- Start an interactive session where you can chat with the LLM
+- Type your prompts and receive responses
+- Type `exit` or `quit` to end the session
+- Press `Ctrl+C` to exit at any time
+
 ## Development
 
 ```bash
