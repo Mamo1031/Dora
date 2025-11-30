@@ -28,4 +28,8 @@ def test_llm_invoke() -> None:
         assert isinstance(response, str)
         assert len(response) > 0
     except RuntimeError as e:
+        # Check if the error is due to connection issues (Ollama not available)
+        error_str = str(e).lower()
+        if "connection" in error_str or "connection refused" in error_str:
+            pytest.skip(f"Ollama not available during invoke: {e}")
         pytest.fail(f"Failed to generate response: {e}")
