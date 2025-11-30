@@ -51,8 +51,16 @@ source .venv/bin/activate  # Linux/Mac
 Before using the local LLM, ensure:
 
 1. **Ollama is installed and running**
-   - Install Ollama from [https://ollama.ai](https://ollama.ai)
-   - Start the Ollama service
+   
+   Install Ollama on Linux/WSL:
+   ```bash
+   curl -fsSL https://ollama.ai/install.sh | sh
+   ```
+   
+   After installation, Ollama service should start automatically. If not, start it manually:
+   ```bash
+   ollama serve
+   ```
 
 2. **Llama 3.2 (3B) model is pulled**
    ```bash
