@@ -71,6 +71,11 @@ convention = "numpy"
 style = 'numpy'
 exclude = '\.git|\.ruff_cache|\.mypy_cache|\.venv'
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+norecursedirs = [".git", ".ruff_cache", ".venv", "scripts"]
+
 [tool.poe.tasks]
 lint-ruff = "ruff check --fix ."
 lint-ruff-check = "ruff check ."
