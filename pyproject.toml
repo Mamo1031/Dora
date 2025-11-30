@@ -53,7 +53,7 @@ target-version = "py310"
 [tool.ruff.lint]
 preview = true
 select = ["ALL"]
-ignore = ["CPY001", "INP001"]
+ignore = ["CPY001", "INP001", "S101"]
 fixable = ["ALL"]
 unfixable = []
 exclude = [".git", ".ruff_cache", ".venv", "scripts"]

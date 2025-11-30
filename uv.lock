@@ -620,6 +620,7 @@ dev = [
     { name = "mypy" },
     { name = "poethepoet" },
     { name = "pydoclint" },
+    { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
 ]
@@ -632,6 +633,7 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11.2" },
     { name = "poethepoet", marker = "extra == 'dev'", specifier = ">=0.29.0" },
     { name = "pydoclint", marker = "extra == 'dev'", specifier = ">=0.5.9" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.8" },
     { name = "sentence-transformers", specifier = ">=2.3.0" },
