@@ -4,7 +4,7 @@
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI](https://github.com/Mamo1031/Dora/actions/workflows/ci.yaml/badge.svg)](https://github.com/Mamo1031/Dora/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/Mamo1031/Dora/graph/badge.svg?token=D2A2FU8CFY)](https://codecov.io/gh/Mamo1031/Dora)
+[![codecov](https://codecov.io/gh/Mamo1031/Dora/graph/badge.svg?token=IkuhZ1Tu3K)](https://codecov.io/gh/Mamo1031/Dora)
 
 Knowledge-augmented local LLM using RAG (Retrieval-Augmented Generation).
 
@@ -42,6 +42,14 @@ This will install the following main dependencies:
 - `sentence-transformers`: For document vectorization
 - `chromadb`: Vector database
 
+And development dependencies:
+- `pytest`: Testing framework
+- `pytest-cov`: Coverage plugin for pytest
+- `ruff`: Fast Python linter and formatter
+- `mypy`: Static type checker
+- `pydoclint`: Docstring linter
+- `poethepoet`: Task runner
+
 ### 3. Activate Virtual Environment
 
 uv automatically manages the virtual environment. When running scripts:
@@ -58,7 +66,50 @@ source .venv/bin/activate  # Linux/Mac
 .venv\Scripts\activate  # Windows
 ```
 
+## Usage
+
+### Prerequisites
+
+Before using the local LLM, ensure:
+
+1. **Ollama is installed and running**
+   - Install Ollama from [https://ollama.ai](https://ollama.ai)
+   - Start the Ollama service
+
+2. **Llama 3.2 (3B) model is pulled**
+   ```bash
+   ollama pull llama3.2
+   ```
+
+### Testing the Local LLM
+
+After installation, you can test the local LLM using the CLI command:
+
+```bash
+dora-test
+```
+
+This will:
+- Initialize the LocalLLM with Llama 3.2 (3B)
+- Run a test prompt
+- Display the generated response
+
+Alternatively, you can use it with `uv run`:
+
+```bash
+uv run dora-test
+```
+
 ## Development
+
+### Running Tests
+
+Run tests with pytest:
+
+```bash
+# Run all tests
+uv run pytest
+```
 
 ### Code Quality Checks
 
@@ -79,7 +130,14 @@ uv run poe lint
 Dora/
 ├── src/
 │   └── dora/          # Main package
+│       ├── __init__.py
+│       ├── llm.py     # LocalLLM implementation
+│       └── cli.py      # CLI interface
+├── tests/             # Test files
+│   ├── __init__.py
+│   └── test_llm.py    # LLM tests
 ├── pyproject.toml      # Project configuration
 ├── uv.lock            # Dependency lock file
+├── .gitignore         # Git ignore rules
 └── README.md
 ```
