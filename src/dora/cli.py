@@ -5,7 +5,7 @@ import sys
 from dora.llm import LocalLLM
 
 
-def test_llm() -> None:
+def run_test_llm() -> None:
     """Test the local LLM with a simple prompt."""
     print("Initializing Local LLM with Llama 3.2 (3B)...")  # noqa: T201
     try:

@@ -23,7 +23,7 @@ dev = [
 ]
 
 [project.scripts]
-dora-test = "dora.cli:test_llm"
+dora-test = "dora.cli:run_test_llm"
 
 [build-system]
 requires = ["hatchling"]
