@@ -21,6 +21,9 @@ dev = [
   "ruff>=0.6.8",
 ]
 
+[project.scripts]
+dora-test = "dora.cli:test_llm"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -39,6 +42,8 @@ explicit_package_bases = true
 
 [tool.pyright]
 reportMissingImports = "none"
+exclude = [".git", ".ruff_cache", ".venv"]
+extraPaths = ["src"]
 
 [tool.ruff]
 line-length = 120
@@ -47,10 +52,10 @@ target-version = "py310"
 [tool.ruff.lint]
 preview = true
 select = ["ALL"]
-ignore = ["CPY001"]
+ignore = ["CPY001", "INP001"]
 fixable = ["ALL"]
 unfixable = []
-exclude = [".git", ".ruff_cache", ".venv",]
+exclude = [".git", ".ruff_cache", ".venv", "scripts"]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.format]
