@@ -1,7 +1,7 @@
 """Local LLM implementation using Ollama and LangChain."""
 
 
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 
 
 class LocalLLM:
@@ -22,7 +22,7 @@ class LocalLLM:
         """
         self.model_name = model_name
         try:
-            self.llm = Ollama(model=model_name)
+            self.llm = OllamaLLM(model=model_name)
         except Exception as e:
             error_msg = (
                 f"Failed to connect to Ollama or model '{model_name}' is not available. "

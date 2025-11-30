@@ -37,7 +37,7 @@ def test_llm_initialization_default_model() -> None:
         pytest.skip(f"Ollama not available: {e}")
 
 
-@patch("dora.llm.Ollama")
+@patch("dora.llm.OllamaLLM")
 def test_llm_initialization_connection_error(mock_ollama: MagicMock) -> None:
     """Test that LocalLLM raises ConnectionError when Ollama is not available."""
     mock_ollama.side_effect = Exception("Connection refused")
@@ -67,7 +67,7 @@ def test_llm_invoke() -> None:
         pytest.fail(f"Failed to generate response: {e}")
 
 
-@patch("dora.llm.Ollama")
+@patch("dora.llm.OllamaLLM")
 def test_llm_invoke_with_mock(mock_ollama: MagicMock) -> None:
     """Test that LocalLLM invoke works with mocked Ollama."""
     mock_llm_instance = MagicMock()
@@ -81,7 +81,7 @@ def test_llm_invoke_with_mock(mock_ollama: MagicMock) -> None:
     mock_llm_instance.invoke.assert_called_once_with("Test prompt")
 
 
-@patch("dora.llm.Ollama")
+@patch("dora.llm.OllamaLLM")
 def test_llm_invoke_runtime_error(mock_ollama: MagicMock) -> None:
     """Test that LocalLLM raises RuntimeError when invoke fails."""
     mock_llm_instance = MagicMock()
