@@ -1,6 +1,5 @@
 """Local LLM implementation using Ollama and LangChain."""
 
-from typing import Optional
 
 from langchain_community.llms import Ollama
 
@@ -25,10 +24,11 @@ class LocalLLM:
         try:
             self.llm = Ollama(model=model_name)
         except Exception as e:
-            raise ConnectionError(
+            error_msg = (
                 f"Failed to connect to Ollama or model '{model_name}' is not available. "
                 f"Make sure Ollama is running and the model is pulled: ollama pull {model_name}"
-            ) from e
+            )
+            raise ConnectionError(error_msg) from e
 
     def invoke(self, prompt: str) -> str:
         """Generate a response from the LLM.
@@ -50,7 +50,8 @@ class LocalLLM:
         """
         try:
             response = self.llm.invoke(prompt)
-            return response
         except Exception as e:
-            raise RuntimeError(f"Failed to generate response: {e}") from e
-
+            error_msg = f"Failed to generate response: {e}"
+            raise RuntimeError(error_msg) from e
+        else:
+            return response
