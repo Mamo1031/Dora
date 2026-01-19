@@ -1,9 +1,12 @@
 """Test script for local LLM functionality."""
 
+import tempfile
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
+from dora.knowledge_base import KnowledgeBase
 from dora.llm import LocalLLM
 
 
@@ -92,3 +95,83 @@ def test_llm_invoke_runtime_error(mock_ollama: MagicMock) -> None:
     with pytest.raises(RuntimeError) as exc_info:
         llm.invoke("Test prompt")
     assert "Failed to generate response" in str(exc_info.value)
+
+
+@patch("dora.llm.OllamaLLM")
+def test_llm_initialization_with_rag(mock_ollama: MagicMock) -> None:
+    """Test that LocalLLM can be initialized with RAG enabled."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        kb = KnowledgeBase(kb_directory=Path(tmpdir) / "kb")
+        llm = LocalLLM(model_name="llama3.2", use_rag=True, knowledge_base=kb)
+
+        assert llm.use_rag is True
+        assert llm.knowledge_base == kb
+        assert llm.rag_chain is not None
+
+
+@patch("dora.llm.OllamaLLM")
+def test_llm_initialization_rag_without_kb(mock_ollama: MagicMock) -> None:
+    """Test that LocalLLM raises ValueError when RAG is enabled without knowledge base."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    with pytest.raises(ValueError, match="knowledge_base must be provided"):
+        LocalLLM(model_name="llama3.2", use_rag=True, knowledge_base=None)
+
+
+@patch("dora.llm.OllamaLLM")
+@patch("dora.llm.RAGChain")
+def test_llm_invoke_with_rag(mock_rag_chain_class: MagicMock, mock_ollama: MagicMock) -> None:
+    """Test that LocalLLM uses RAG when enabled."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    mock_rag_chain = MagicMock()
+    mock_rag_chain.get_answer.return_value = "RAG answer"
+    mock_rag_chain_class.return_value = mock_rag_chain
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        kb = KnowledgeBase(kb_directory=Path(tmpdir) / "kb")
+        llm = LocalLLM(model_name="llama3.2", use_rag=True, knowledge_base=kb)
+
+        response = llm.invoke("Test query")
+        assert response == "RAG answer"
+        mock_rag_chain.get_answer.assert_called_once_with("Test query")
+
+
+@patch("dora.llm.OllamaLLM")
+@patch("dora.llm.RAGChain")
+def test_llm_invoke_with_sources(mock_rag_chain_class: MagicMock, mock_ollama: MagicMock) -> None:
+    """Test that LocalLLM can return response with sources."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    mock_rag_chain = MagicMock()
+    mock_rag_chain.invoke.return_value = {
+        "result": "RAG answer",
+        "source_documents": [],
+    }
+    mock_rag_chain_class.return_value = mock_rag_chain
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        kb = KnowledgeBase(kb_directory=Path(tmpdir) / "kb")
+        llm = LocalLLM(model_name="llama3.2", use_rag=True, knowledge_base=kb)
+
+        result = llm.invoke_with_sources("Test query")
+        assert "result" in result
+        assert "source_documents" in result
+        assert result["result"] == "RAG answer"
+
+
+@patch("dora.llm.OllamaLLM")
+def test_llm_invoke_with_sources_without_rag(mock_ollama: MagicMock) -> None:
+    """Test that invoke_with_sources raises ValueError when RAG is not enabled."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    llm = LocalLLM(model_name="llama3.2", use_rag=False)
+    with pytest.raises(ValueError, match="RAG must be enabled"):
+        llm.invoke_with_sources("Test query")

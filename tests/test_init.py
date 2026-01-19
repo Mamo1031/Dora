@@ -10,8 +10,9 @@ def test_version() -> None:
 
 def test_all() -> None:
     """Test that __all__ is defined correctly."""
-    assert __all__ == ["LocalLLM"]
     assert "LocalLLM" in __all__
+    assert "KnowledgeBase" in __all__
+    assert "RAGChain" in __all__
 
 
 def test_import_local_llm() -> None:
