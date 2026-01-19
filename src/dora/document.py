@@ -75,8 +75,22 @@ class DocumentProcessor:
                 if "source" not in chunk.metadata:
                     chunk.metadata["source"] = str(file_path)
                 chunk.metadata["file_name"] = file_path.name
+        except KeyError as e:
+            # Handle specific KeyError (e.g., 'bbox' missing in PDF structure)
+            msg = (
+                f"Failed to load PDF: Missing required field '{e}' in PDF structure. "
+                f"This may indicate a corrupted or incompatible PDF file: {file_path}"
+            )
+            raise RuntimeError(msg) from e
         except Exception as e:
-            msg = f"Failed to load PDF: {e}"
+            # Provide more detailed error information
+            error_type = type(e).__name__
+            error_msg = str(e)
+            msg = (
+                f"Failed to load PDF ({error_type}): {error_msg}. "
+                f"File: {file_path}. "
+                f"This may indicate a corrupted PDF, unsupported PDF format, or compatibility issue."
+            )
             raise RuntimeError(msg) from e
         else:
             return chunks

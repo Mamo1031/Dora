@@ -1,5 +1,6 @@
 """RAG (Retrieval-Augmented Generation) chain implementation."""
 
+import time
 from typing import Any
 
 from langchain_core.prompts import PromptTemplate
@@ -65,9 +66,15 @@ Answer:"""
             Dictionary containing:
             - "result": The generated answer
             - "source_documents": List of source documents used
+            - "performance": Dictionary with timing information:
+                - "retrieval_time": Time spent on document retrieval (seconds)
+                - "generation_time": Time spent on LLM generation (seconds)
+                - "total_time": Total time for RAG chain (seconds)
         """
-        # Retrieve relevant documents
+        # Measure retrieval time
+        retrieval_start = time.time()
         source_documents = self.retriever.invoke(query)
+        retrieval_time = time.time() - retrieval_start
 
         # Build context from documents
         context = "\n\n".join([doc.page_content for doc in source_documents])
@@ -75,12 +82,21 @@ Answer:"""
         # Create prompt with context
         formatted_prompt = self.prompt.format(context=context, question=query)
 
-        # Generate answer using LLM
+        # Measure generation time
+        generation_start = time.time()
         answer = self.llm.invoke(formatted_prompt)
+        generation_time = time.time() - generation_start
+
+        total_time = retrieval_time + generation_time
 
         return {
             "result": answer,
             "source_documents": source_documents,
+            "performance": {
+                "retrieval_time": retrieval_time,
+                "generation_time": generation_time,
+                "total_time": total_time,
+            },
         }
 
     def get_answer(self, query: str) -> str:
@@ -98,3 +114,19 @@ Answer:"""
         """
         result = self.invoke(query)
         return result.get("result", "")
+
+    def get_answer_with_performance(self, query: str) -> tuple[str, dict[str, float]]:
+        """Get answer text and performance metrics from the RAG chain.
+
+        Parameters
+        ----------
+        query : str
+            User query
+
+        Returns
+        -------
+        tuple[str, dict[str, float]]
+            Tuple of (answer text, performance metrics)
+        """
+        result = self.invoke(query)
+        return result.get("result", ""), result.get("performance", {})

@@ -1,5 +1,6 @@
 """Local LLM implementation using Ollama and LangChain."""
 
+import time
 from typing import Any
 
 from langchain_ollama import OllamaLLM
@@ -97,6 +98,66 @@ class LocalLLM:
             raise RuntimeError(error_msg) from e
         else:
             return response
+
+    def invoke_with_performance(self, prompt: str) -> tuple[str, dict[str, float]]:
+        """Generate a response with performance metrics.
+
+        Parameters
+        ----------
+        prompt : str
+            Input prompt for the LLM
+
+        Returns
+        -------
+        tuple[str, dict[str, float]]
+            Tuple of (response text, performance metrics)
+            Performance metrics include:
+            - "total_time": Total response time (seconds)
+            - "generation_time": LLM generation time (seconds)
+            - "retrieval_time": Document retrieval time (seconds, RAG only)
+            - "ttft": Time to first token (seconds, approximate)
+
+        Raises
+        ------
+        RuntimeError
+            If the LLM fails to generate a response
+        """
+        try:
+            if self.use_rag and self.rag_chain is not None:
+                # Use RAG chain with performance tracking
+                total_start = time.time()
+                answer, rag_perf = self.rag_chain.get_answer_with_performance(prompt)
+                total_time = time.time() - total_start
+
+                # Approximate TTFT (first token time) as a fraction of generation time
+                # In practice, this would require streaming to measure accurately
+                ttft_approx = rag_perf.get("generation_time", 0) * 0.1  # Rough estimate
+
+                performance = {
+                    "total_time": total_time,
+                    "generation_time": rag_perf.get("generation_time", 0),
+                    "retrieval_time": rag_perf.get("retrieval_time", 0),
+                    "ttft": ttft_approx,
+                }
+                return answer, performance
+            # Direct LLM query
+            total_start = time.time()
+            response = self.llm.invoke(prompt)
+            total_time = time.time() - total_start
+
+            # Approximate TTFT (first token time) as a fraction of total time
+            ttft_approx = total_time * 0.1  # Rough estimate
+
+            performance = {
+                "total_time": total_time,
+                "generation_time": total_time,
+                "retrieval_time": 0.0,
+                "ttft": ttft_approx,
+            }
+            return response, performance
+        except Exception as e:
+            error_msg = f"Failed to generate response: {e}"
+            raise RuntimeError(error_msg) from e
 
     def invoke_with_sources(self, prompt: str) -> dict[str, Any]:
         """Generate a response with source documents (RAG only).
