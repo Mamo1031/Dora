@@ -93,8 +93,41 @@ def _initialize_llm(use_rag: bool, kb: KnowledgeBase | None) -> LocalLLM:
         sys.exit(1)
 
 
+def _handle_subcommands() -> bool:
+    """Handle subcommands if present.
+
+    Returns
+    -------
+    bool
+        True if a subcommand was handled, False otherwise
+    """
+    if len(sys.argv) <= 1:
+        return False
+
+    subcommand = sys.argv[1]
+    if subcommand == "add-doc":
+        add_document()
+        return True
+    if subcommand == "list-docs":
+        list_documents()
+        return True
+    if subcommand == "clear-kb":
+        clear_knowledge_base()
+        return True
+
+    return False
+
+
 def interactive() -> None:
-    """Interactive CLI for chatting with the local LLM with RAG support."""
+    """Interactive CLI for chatting with the local LLM with RAG support.
+
+    Also handles subcommands: add-doc, list-docs, clear-kb
+    """
+    # Check for subcommands
+    if _handle_subcommands():
+        return
+
+    # No subcommand, start interactive mode
     print("Initializing Local LLM with Llama 3.2 (3B)...")  # noqa: T201
 
     kb, use_rag = _initialize_knowledge_base()
@@ -130,11 +163,16 @@ def interactive() -> None:
 
 def add_document() -> None:
     """Add a document to the knowledge base."""
-    if len(sys.argv) < MIN_ARGS_FOR_ADD_DOC:
+    # Check if called as subcommand (dora add-doc) or standalone (dora-add-doc)
+    if len(sys.argv) >= 3 and sys.argv[1] == "add-doc":
+        # Called as subcommand: dora add-doc <file>
+        file_path = Path(sys.argv[2])
+    elif len(sys.argv) >= 2:
+        # Called as standalone: dora-add-doc <file>
+        file_path = Path(sys.argv[1])
+    else:
         print("Usage: dora add-doc <file_path>")  # noqa: T201
         sys.exit(1)
-
-    file_path = Path(sys.argv[2])
 
     if not file_path.exists():
         print(f"✗ Error: File not found: {file_path}")  # noqa: T201

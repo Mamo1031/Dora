@@ -59,6 +59,7 @@ class VectorStore:
                 client=self.client,
                 embedding_function=self.embeddings,
                 persist_directory=str(self.persist_directory),
+                collection_name="dora_kb",
             )
         return self.vectorstore
 
@@ -76,9 +77,8 @@ class VectorStore:
             List of document IDs added to the vector store
         """
         vectorstore = self._get_or_create_vectorstore()
-        ids = vectorstore.add_documents(documents)
-        vectorstore.persist()
-        return ids
+        # ChromaDB 0.4.x+ automatically persists, no need to call persist()
+        return vectorstore.add_documents(documents)
 
     def similarity_search(
         self,
@@ -154,14 +154,16 @@ class VectorStore:
         dict[str, Any]
             Collection information including count of documents
         """
-        if self.vectorstore is None:
+        try:
+            vectorstore = self._get_or_create_vectorstore()
+            collection = vectorstore._collection
+            count = collection.count()
+
+            return {
+                "count": count,
+                "exists": True,
+                "collection_name": collection.name,
+            }
+        except (AttributeError, RuntimeError, ValueError):
+            # If collection doesn't exist or can't be accessed
             return {"count": 0, "exists": False}
-
-        collection = self.vectorstore._collection
-        count = collection.count()
-
-        return {
-            "count": count,
-            "exists": True,
-            "collection_name": collection.name,
-        }
