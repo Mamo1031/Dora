@@ -1,4 +1,4 @@
-# Dora
+# 🤖 Dora
 
 ![python](https://img.shields.io/badge/python-3.10+-blue)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
@@ -6,27 +6,27 @@
 [![CI](https://github.com/Mamo1031/Dora/actions/workflows/ci.yaml/badge.svg)](https://github.com/Mamo1031/Dora/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/Mamo1031/Dora/graph/badge.svg?token=IkuhZ1Tu3K)](https://codecov.io/gh/Mamo1031/Dora)
 
-**Dora** is a local LLM system that uses RAG (Retrieval-Augmented Generation) technology to enhance responses with knowledge from PDF documents. All processing runs locally on your machine, ensuring privacy and security.
+**Dora** is a local LLM system that uses RAG (Retrieval-Augmented Generation) technology to enhance responses with knowledge from PDF documents. All processing runs locally on your machine, ensuring privacy and security. 
 
-## Features
+## ✨ Features
 
-- **Fully Local**: Runs completely offline after initial setup
-- **RAG Support**: Enhances responses with knowledge from your PDF documents
-- **Multilingual**: Supports documents in multiple languages including Japanese
-- **Easy to Use**: Simple command-line interface
-- **Privacy-First**: All data stays on your local machine
+- 🏠 **Fully Local**: Runs completely offline after initial setup
+- 📚 **RAG Support**: Enhances responses with knowledge from your PDF documents
+- 🌍 **Multilingual**: Supports documents in multiple languages including Japanese
+- 🎯 **Easy to Use**: Simple command-line interface
+- 🔒 **Privacy-First**: All data stays on your local machine
 
-## Overview
+## 📖 Overview
 
 Dora uses Ollama to run a large language model (LLM) locally and retrieves knowledge from PDF documents to provide more accurate and up-to-date answers. By using RAG technology, Dora addresses common LLM issues such as hallucinations (incorrect information) and outdated knowledge.
 
-## Requirements
+## 📋 Requirements
 
 - Python 3.10 or higher
 - [uv](https://github.com/astral-sh/uv) (package manager)
 - [Ollama](https://ollama.ai/) (local LLM runtime)
 
-## Installation
+## 🛠️ Installation
 
 ### Step 1: Install uv
 
@@ -81,9 +81,9 @@ ollama serve
 ollama pull llama3.2
 ```
 
-You're all set!
+You're all set! ✅
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Test the Installation
 
@@ -119,7 +119,7 @@ You: exit
 Goodbye!
 ```
 
-## Using RAG Features
+## 📚 Using RAG Features
 
 RAG (Retrieval-Augmented Generation) allows Dora to retrieve information from your PDF documents to provide more accurate answers.
 
@@ -192,7 +192,7 @@ You: According to the manual, how do I use this feature?
 Assistant: [Answer based on the manual content]
 ```
 
-## Available Commands
+## 💻 Available Commands
 
 | Command | Description |
 |---------|-------------|
@@ -202,7 +202,7 @@ Assistant: [Answer based on the manual content]
 | `dora list-docs` | List all documents in the knowledge base |
 | `dora clear-kb` | Remove all documents from the knowledge base |
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### Cannot Connect to Ollama
 
@@ -254,7 +254,7 @@ Assistant: [Answer based on the manual content]
 - Increase system memory
 - Close other applications to free up memory
 
-## Frequently Asked Questions (FAQ)
+## ❓ Frequently Asked Questions (FAQ)
 
 **Q: What types of PDF files are supported?**\
 A: Dora supports PDF files that contain text. PDFs with only images or scanned PDFs may require OCR processing beforehand.
@@ -277,10 +277,10 @@ A: RAG retrieves relevant information from your documents and includes it in the
 **Q: Can I use Dora without adding documents?**\
 A: Yes, you can use Dora in regular LLM mode without RAG. Just start interactive mode without adding any documents.
 
-## License
+## 📄 License
 
 This project is open source. See the [LICENSE](LICENSE) file for details.
 
-## Contributing
+## 🤝 Contributing
 
-Bug reports and feature requests are welcome via GitHub Issues. Pull requests are also appreciated.
+Bug reports and feature requests are welcome via GitHub Issues. Pull requests are also appreciated!
