@@ -279,13 +279,13 @@ def test_add_document_success(
 
 
 @patch("sys.stdout", new_callable=StringIO)
-@patch("sys.argv", ["dora", "add-doc"])
+@patch("sys.argv", ["dora-add-doc"])
 @patch("sys.exit")
 def test_add_document_missing_args(
     mock_exit: MagicMock,
     mock_stdout: StringIO,
 ) -> None:
-    """Test add_document when file path is missing."""
+    """Test add_document when file path is missing (standalone call)."""
     mock_exit.side_effect = SystemExit(1)
 
     with pytest.raises(SystemExit):
