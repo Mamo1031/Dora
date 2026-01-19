@@ -5,6 +5,7 @@ description = "Knowledge-augmented local LLM using RAG"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Mamoru Ota" }]
+license = { text = "MIT" }
 dependencies = [
   "langchain>=0.1.0",
   "langchain-community>=0.0.20",
