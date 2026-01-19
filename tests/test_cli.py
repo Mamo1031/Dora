@@ -7,6 +7,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from dora.cli import (
+    _initialize_knowledge_base,  # noqa: PLC2701
+    _initialize_llm,  # noqa: PLC2701
     add_document,
     clear_knowledge_base,
     interactive,
@@ -322,9 +324,8 @@ def test_add_document_not_pdf(
     """Test add_document when file is not a PDF."""
     mock_exit.side_effect = SystemExit(1)
 
-    with patch.object(Path, "exists", return_value=True):
-        with pytest.raises(SystemExit):
-            add_document()
+    with patch.object(Path, "exists", return_value=True), pytest.raises(SystemExit):
+        add_document()
 
     output = mock_stdout.getvalue()
     assert "Error: Only PDF files are supported:" in output
@@ -346,9 +347,8 @@ def test_add_document_error(
     mock_knowledge_base.return_value = mock_kb_instance
     mock_exit.side_effect = SystemExit(1)
 
-    with patch.object(Path, "exists", return_value=True):
-        with pytest.raises(SystemExit):
-            add_document()
+    with patch.object(Path, "exists", return_value=True), pytest.raises(SystemExit):
+        add_document()
 
     output = mock_stdout.getvalue()
     assert "Error adding document:" in output
@@ -578,8 +578,6 @@ def test_initialize_knowledge_base_with_documents(
     mock_knowledge_base: MagicMock,
 ) -> None:
     """Test _initialize_knowledge_base when documents exist."""
-    from dora.cli import _initialize_knowledge_base
-
     mock_kb_instance = MagicMock()
     mock_kb_instance.get_info.return_value = {"exists": True, "count": 10}
     mock_knowledge_base.return_value = mock_kb_instance
@@ -600,8 +598,6 @@ def test_initialize_knowledge_base_empty(
     mock_knowledge_base: MagicMock,
 ) -> None:
     """Test _initialize_knowledge_base when no documents exist."""
-    from dora.cli import _initialize_knowledge_base
-
     mock_kb_instance = MagicMock()
     mock_kb_instance.get_info.return_value = {"exists": True, "count": 0}
     mock_knowledge_base.return_value = mock_kb_instance
@@ -622,8 +618,6 @@ def test_initialize_knowledge_base_error(
     mock_knowledge_base: MagicMock,
 ) -> None:
     """Test _initialize_knowledge_base when initialization fails."""
-    from dora.cli import _initialize_knowledge_base
-
     mock_knowledge_base.side_effect = RuntimeError("Init failed")
 
     kb, use_rag = _initialize_knowledge_base()
@@ -645,8 +639,6 @@ def test_initialize_llm_success(
     mock_local_llm: MagicMock,
 ) -> None:
     """Test _initialize_llm success case."""
-    from dora.cli import _initialize_llm
-
     mock_llm_instance = MagicMock()
     mock_local_llm.return_value = mock_llm_instance
     mock_kb = MagicMock()
@@ -670,8 +662,6 @@ def test_initialize_llm_value_error(
     mock_local_llm: MagicMock,
 ) -> None:
     """Test _initialize_llm when ValueError occurs."""
-    from dora.cli import _initialize_llm
-
     mock_local_llm.side_effect = ValueError("Invalid configuration")
     mock_exit.side_effect = SystemExit(1)
 
