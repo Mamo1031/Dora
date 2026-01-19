@@ -9,8 +9,10 @@ dependencies = [
   "langchain>=0.1.0",
   "langchain-community>=0.0.20",
   "langchain-ollama>=0.1.0",
+  "langchain-text-splitters>=0.2.0",
   "sentence-transformers>=2.3.0",
   "chromadb>=0.4.0",
+  "pypdf>=3.0.0",
 ]
 
 [project.optional-dependencies]
@@ -26,6 +28,9 @@ dev = [
 [project.scripts]
 dora-test = "dora.cli:run_test_llm"
 dora = "dora.cli:interactive"
+dora-add-doc = "dora.cli:add_document"
+dora-list-docs = "dora.cli:list_documents"
+dora-clear-kb = "dora.cli:clear_knowledge_base"
 
 [build-system]
 requires = ["hatchling"]
@@ -55,7 +60,18 @@ target-version = "py310"
 [tool.ruff.lint]
 preview = true
 select = ["ALL"]
-ignore = ["CPY001", "INP001", "S101"]
+ignore = [
+    "CPY001",  # Allow print statements in CLI
+    "INP001",  # Allow implicit namespace packages
+    "S101",  # Allow assert statements in tests
+    "ANN401",  # Allow Any in type annotations (for LangChain compatibility)
+    "SLF001",  # Allow private member access (for ChromaDB internals)
+    "FBT001",  # Allow boolean positional arguments
+    "FBT002",  # Allow boolean default arguments
+    "PLR2004",  # Allow magic values in tests
+    "RUF001",  # Allow Unicode characters in strings
+    "TRY300",  # Allow return statements without else blocks
+]
 fixable = ["ALL"]
 unfixable = []
 exclude = [".git", ".ruff_cache", ".venv", "scripts"]
