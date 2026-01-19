@@ -148,3 +148,6 @@ chroma_db/
 *.pyc
 .pytest_cache/
 
+# Dora knowledge base
+.dora/
+
