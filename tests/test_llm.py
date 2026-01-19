@@ -175,3 +175,91 @@ def test_llm_invoke_with_sources_without_rag(mock_ollama: MagicMock) -> None:
     llm = LocalLLM(model_name="llama3.2", use_rag=False)
     with pytest.raises(ValueError, match="RAG must be enabled"):
         llm.invoke_with_sources("Test query")
+
+
+@patch("dora.llm.OllamaLLM")
+@patch("dora.llm.RAGChain")
+def test_llm_invoke_with_sources_runtime_error(
+    mock_rag_chain_class: MagicMock,
+    mock_ollama: MagicMock,
+) -> None:
+    """Test that invoke_with_sources raises RuntimeError on failure."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    mock_rag_chain = MagicMock()
+    mock_rag_chain.invoke.side_effect = Exception("RAG invoke failed")
+    mock_rag_chain_class.return_value = mock_rag_chain
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        kb = KnowledgeBase(kb_directory=Path(tmpdir) / "kb")
+        llm = LocalLLM(model_name="llama3.2", use_rag=True, knowledge_base=kb)
+
+        with pytest.raises(RuntimeError, match="Failed to generate response"):
+            llm.invoke_with_sources("Test query")
+
+
+@patch("dora.llm.OllamaLLM")
+def test_llm_invoke_with_performance_without_rag(mock_ollama: MagicMock) -> None:
+    """Test invoke_with_performance without RAG."""
+    mock_llm_instance = MagicMock()
+    mock_llm_instance.invoke.return_value = "Test response"
+    mock_ollama.return_value = mock_llm_instance
+
+    llm = LocalLLM(model_name="llama3.2", use_rag=False)
+    response, performance = llm.invoke_with_performance("Test prompt")
+
+    assert response == "Test response"
+    assert "total_time" in performance
+    assert "generation_time" in performance
+    assert "retrieval_time" in performance
+    assert "ttft" in performance
+    assert performance["retrieval_time"] == 0.0
+    assert performance["total_time"] > 0
+    mock_llm_instance.invoke.assert_called_once_with("Test prompt")
+
+
+@patch("dora.llm.OllamaLLM")
+@patch("dora.llm.RAGChain")
+def test_llm_invoke_with_performance_with_rag(
+    mock_rag_chain_class: MagicMock,
+    mock_ollama: MagicMock,
+) -> None:
+    """Test invoke_with_performance with RAG enabled."""
+    mock_llm_instance = MagicMock()
+    mock_ollama.return_value = mock_llm_instance
+
+    mock_rag_chain = MagicMock()
+    mock_rag_chain.get_answer_with_performance.return_value = (
+        "RAG answer",
+        {"generation_time": 1.0, "retrieval_time": 0.5},
+    )
+    mock_rag_chain_class.return_value = mock_rag_chain
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        kb = KnowledgeBase(kb_directory=Path(tmpdir) / "kb")
+        llm = LocalLLM(model_name="llama3.2", use_rag=True, knowledge_base=kb)
+
+        response, performance = llm.invoke_with_performance("Test query")
+
+        assert response == "RAG answer"
+        assert "total_time" in performance
+        assert "generation_time" in performance
+        assert "retrieval_time" in performance
+        assert "ttft" in performance
+        assert performance["generation_time"] == 1.0
+        assert performance["retrieval_time"] == 0.5
+        mock_rag_chain.get_answer_with_performance.assert_called_once_with("Test query")
+
+
+@patch("dora.llm.OllamaLLM")
+def test_llm_invoke_with_performance_runtime_error(mock_ollama: MagicMock) -> None:
+    """Test invoke_with_performance raises RuntimeError on failure."""
+    mock_llm_instance = MagicMock()
+    mock_llm_instance.invoke.side_effect = Exception("Invoke failed")
+    mock_ollama.return_value = mock_llm_instance
+
+    llm = LocalLLM(model_name="llama3.2", use_rag=False)
+
+    with pytest.raises(RuntimeError, match="Failed to generate response"):
+        llm.invoke_with_performance("Test prompt")
