@@ -13,7 +13,7 @@ dependencies = [
   "langchain-text-splitters>=0.2.0",
   "sentence-transformers>=2.3.0",
   "chromadb>=0.4.0",
-  "pypdf>=3.0.0",
+  "pypdf>=3.0.0,<6.0.0",
 ]
 
 [project.optional-dependencies]
@@ -32,6 +32,7 @@ dora = "dora.cli:interactive"
 dora-add-doc = "dora.cli:add_document"
 dora-list-docs = "dora.cli:list_documents"
 dora-clear-kb = "dora.cli:clear_knowledge_base"
+dora-evaluate = "dora.evaluate:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -90,6 +91,9 @@ convention = "numpy"
 [tool.pydoclint]
 style = 'numpy'
 exclude = '\.git|\.ruff_cache|\.mypy_cache|\.venv'
+
+[tool.coverage.run]
+omit = ["src/dora/evaluate.py"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
