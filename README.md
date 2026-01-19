@@ -1,49 +1,50 @@
 # Dora
 
-![python](https://img.shields.io/badge/python-3.10-blue)
+![python](https://img.shields.io/badge/python-3.10+-blue)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI](https://github.com/Mamo1031/Dora/actions/workflows/ci.yaml/badge.svg)](https://github.com/Mamo1031/Dora/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/Mamo1031/Dora/graph/badge.svg?token=IkuhZ1Tu3K)](https://codecov.io/gh/Mamo1031/Dora)
 
-Knowledge-augmented local LLM using RAG (Retrieval-Augmented Generation).
+**Dora** is a local LLM system that uses RAG (Retrieval-Augmented Generation) technology to enhance responses with knowledge from PDF documents. All processing runs locally on your machine, ensuring privacy and security.
+
+## Features
+
+- **Fully Local**: Runs completely offline after initial setup
+- **RAG Support**: Enhances responses with knowledge from your PDF documents
+- **Multilingual**: Supports documents in multiple languages including Japanese
+- **Easy to Use**: Simple command-line interface
+- **Privacy-First**: All data stays on your local machine
 
 ## Overview
 
-Dora is a knowledge-augmented large language model (LLM) system that operates in a local environment. It uses RAG (Retrieval-Augmented Generation) technology to supplement accurate and up-to-date information from external knowledge sources, addressing issues such as hallucinations (incorrect knowledge generation) and outdated knowledge.
-
-### Features
-
-- **Local LLM**: Run LLM inference locally using Ollama
-- **RAG Support**: Enhance responses with knowledge from PDF documents
-- **Vector Search**: Fast semantic search using ChromaDB and multilingual embeddings
-- **Knowledge Base Management**: Easy document management via CLI commands
+Dora uses Ollama to run a large language model (LLM) locally and retrieves knowledge from PDF documents to provide more accurate and up-to-date answers. By using RAG technology, Dora addresses common LLM issues such as hallucinations (incorrect information) and outdated knowledge.
 
 ## Requirements
 
 - Python 3.10 or higher
 - [uv](https://github.com/astral-sh/uv) (package manager)
+- [Ollama](https://ollama.ai/) (local LLM runtime)
 
-## Setup
+## Installation
 
-### 1. Install uv
+### Step 1: Install uv
 
-If uv is not installed, you can install it with the following command:
+If you don't have uv installed, install it with:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 2. Install Dependencies
+### Step 2: Install Dependencies
 
-Run the following command in the project root:
+Navigate to the project root directory and run:
 
 ```bash
-# Install main dependencies and development dependencies
-uv sync --all-extras
+uv sync
 ```
 
-### 3. Activate Virtual Environment
+### Step 3: Activate Virtual Environment
 
 ```bash
 source .venv/bin/activate  # Linux/Mac
@@ -51,86 +52,100 @@ source .venv/bin/activate  # Linux/Mac
 .venv\Scripts\activate  # Windows
 ```
 
-## Usage
+### Step 4: Install and Setup Ollama
 
-### Prerequisites
+Install Ollama:
 
-Before using the local LLM, ensure:
+**Linux/WSL:**
+```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+```
 
-1. **Ollama is installed and running**
-   
-   Install Ollama on Linux/WSL:
-   ```bash
-   curl -fsSL https://ollama.ai/install.sh | sh
-   ```
-   
-   After installation, Ollama service should start automatically. If not, start it manually:
-   ```bash
-   ollama serve
-   ```
+**macOS:**
+```bash
+brew install ollama
+```
 
-2. **Llama 3.2 (3B) model is pulled**
-   ```bash
-   ollama pull llama3.2
-   ```
+**Windows:**
+Download and install from the [Ollama website](https://ollama.ai/)
 
-### Testing the Local LLM
+After installation, the Ollama service should start automatically. If not, start it manually:
 
-After installation, you can test the local LLM using the CLI command:
+```bash
+ollama serve
+```
+
+### Step 5: Download Llama 3.2 Model
+
+```bash
+ollama pull llama3.2
+```
+
+You're all set!
+
+## Quick Start
+
+### Test the Installation
+
+Verify that everything works:
 
 ```bash
 dora-test
 ```
 
-This will:
-- Initialize the LocalLLM with Llama 3.2 (3B)
-- Run a test prompt
-- Display the generated response
+This will test if the LLM is working correctly.
 
-### Interactive Mode
+### Basic Interactive Mode
 
-Start an interactive chat session with the LLM:
+Start a conversation with the LLM:
 
 ```bash
 dora
 ```
 
-This will:
-- Initialize the LocalLLM with Llama 3.2 (3B)
-- Automatically detect if a knowledge base exists and enable RAG mode
-- Start an interactive session where you can chat with the LLM
-- Type your prompts and receive responses
+In interactive mode:
+- The LLM initializes automatically
+- RAG mode is automatically enabled if you have documents in the knowledge base
+- Type your questions and get answers
 - Type `exit` or `quit` to end the session
 - Press `Ctrl+C` to exit at any time
 
-If documents are added to the knowledge base, RAG mode will be automatically enabled to provide more accurate answers based on your documents.
+**Example:**
+```
+You: What is Python?
+Assistant: Python is a programming language...
 
-### RAG (Retrieval-Augmented Generation)
-
-Dora supports RAG to enhance LLM responses with information from your documents. The system uses:
-- **ChromaDB**: Vector database for storing document embeddings
-- **Multilingual Embeddings**: `paraphrase-multilingual-MiniLM-L12-v2` for semantic search
-- **PDF Support**: Load and process PDF documents
-
-#### Adding Documents to Knowledge Base
-
-Add a PDF document to the knowledge base:
-
-```bash
-dora add-doc <path_to_pdf_file>
+You: exit
+Goodbye!
 ```
 
-Example:
+## Using RAG Features
+
+RAG (Retrieval-Augmented Generation) allows Dora to retrieve information from your PDF documents to provide more accurate answers.
+
+### Adding Documents
+
+Add PDF documents to your knowledge base:
+
 ```bash
 dora add-doc document.pdf
 ```
 
-The document will be:
-- Loaded and split into chunks (1000 characters with 200 character overlap)
-- Embedded using the multilingual embedding model
-- Stored in the vector database at `.dora/kb/`
+**Examples:**
+```bash
+# Add a PDF file from the current directory
+dora add-doc my_document.pdf
 
-#### Listing Documents
+# Add a PDF file with a full path
+dora add-doc /path/to/document.pdf
+```
+
+Documents are automatically:
+- Loaded and split into appropriate chunks (1000 characters with 200 character overlap)
+- Converted to vectors using a multilingual embedding model
+- Stored in the `.dora/kb/` directory
+
+### Listing Documents
 
 View all documents in your knowledge base:
 
@@ -138,11 +153,16 @@ View all documents in your knowledge base:
 dora list-docs
 ```
 
-This shows:
-- Total number of chunks in the knowledge base
-- List of document sources
+**Example Output:**
+```
+Knowledge base contains 45 chunks.
 
-#### Clearing Knowledge Base
+Documents:
+  1. /path/to/document1.pdf
+  2. /path/to/document2.pdf
+```
+
+### Clearing the Knowledge Base
 
 Remove all documents from the knowledge base:
 
@@ -150,76 +170,117 @@ Remove all documents from the knowledge base:
 dora clear-kb
 ```
 
-This will prompt for confirmation before clearing.
+You'll be prompted for confirmation. Type `yes` to confirm deletion.
 
-#### Using RAG in Code
+### Using RAG Mode
 
-You can also use RAG programmatically:
-
-```python
-from dora import LocalLLM, KnowledgeBase
-
-# Initialize knowledge base
-kb = KnowledgeBase()
-
-# Add a document
-kb.add_document("document.pdf")
-
-# Create LLM with RAG enabled
-llm = LocalLLM(
-    model_name="llama3.2",
-    use_rag=True,
-    knowledge_base=kb
-)
-
-# Get answer with sources
-result = llm.invoke_with_sources("What is the document about?")
-print(result["result"])
-print(f"Sources: {len(result['source_documents'])} documents")
-```
-
-## Development
+After adding documents, start interactive mode and RAG will be automatically enabled:
 
 ```bash
-# Run tests
-uv run poe test
+# 1. Add a document
+dora add-doc manual.pdf
 
-# Run linting
-uv run poe lint
+# 2. Start interactive mode (RAG mode automatically enabled)
+dora
 ```
 
-### Project Structure
+In RAG mode, answers are generated based on the content of your added documents.
 
+**Example:**
 ```
-Dora/
-├── src/
-│   └── dora/              # Main package
-│       ├── __init__.py
-│       ├── llm.py         # LocalLLM implementation with RAG support
-│       ├── cli.py         # CLI interface
-│       ├── document.py    # Document loading and processing
-│       ├── vectorstore.py # Vector store management (ChromaDB)
-│       ├── knowledge_base.py  # Knowledge base management
-│       └── rag.py         # RAG chain implementation
-├── tests/                 # Test files
-│   ├── __init__.py
-│   ├── test_llm.py        # LLM tests
-│   ├── test_document.py   # Document processing tests
-│   ├── test_vectorstore.py # Vector store tests
-│   ├── test_knowledge_base.py # Knowledge base tests
-│   └── test_rag.py        # RAG tests
-├── .dora/                 # Knowledge base storage (created automatically)
-│   └── kb/                # ChromaDB data directory
-├── pyproject.toml         # Project configuration
-├── uv.lock                # Dependency lock file
-├── .gitignore             # Git ignore rules
-└── README.md
+You: According to the manual, how do I use this feature?
+Assistant: [Answer based on the manual content]
 ```
 
-### Available CLI Commands
+## Available Commands
 
-- `dora-test`: Test the local LLM with a simple prompt
-- `dora`: Start interactive chat session (with automatic RAG detection)
-- `dora add-doc <file_path>`: Add a PDF document to the knowledge base
-- `dora list-docs`: List all documents in the knowledge base
-- `dora clear-kb`: Clear all documents from the knowledge base
+| Command | Description |
+|---------|-------------|
+| `dora-test` | Test LLM functionality (runs a test prompt) |
+| `dora` | Start interactive mode (RAG auto-detection) |
+| `dora add-doc <file_path>` | Add a PDF document to the knowledge base |
+| `dora list-docs` | List all documents in the knowledge base |
+| `dora clear-kb` | Remove all documents from the knowledge base |
+
+## Troubleshooting
+
+### Cannot Connect to Ollama
+
+**Error:** `Failed to connect to Ollama`
+
+**Solution:**
+1. Check if Ollama is running:
+   ```bash
+   ollama serve
+   ```
+2. Verify the model is downloaded:
+   ```bash
+   ollama list
+   ```
+3. If the model is not listed, download it again:
+   ```bash
+   ollama pull llama3.2
+   ```
+
+### Cannot Add Document
+
+**Error:** `File not found` or `Only PDF files are supported`
+
+**Solution:**
+- Verify the file path is correct
+- Ensure the file is a PDF (has `.pdf` extension)
+- Check that you have read permissions for the file
+
+### RAG Mode Not Enabled
+
+**Symptom:** RAG is not being used in interactive mode
+
+**Solution:**
+1. Check if documents are added:
+   ```bash
+   dora list-docs
+   ```
+2. If no documents are listed, add one:
+   ```bash
+   dora add-doc your_document.pdf
+   ```
+
+### Out of Memory Error
+
+**Symptom:** Error occurs when processing large PDF files
+
+**Solution:**
+- Split large PDF files into smaller ones
+- Increase system memory
+- Close other applications to free up memory
+
+## Frequently Asked Questions (FAQ)
+
+**Q: What types of PDF files are supported?**\
+A: Dora supports PDF files that contain text. PDFs with only images or scanned PDFs may require OCR processing beforehand.
+
+**Q: Can I add multiple documents?**\
+A: Yes, you can add multiple PDF files. All documents are integrated into the knowledge base and become searchable.
+
+**Q: Where is the knowledge base data stored?**\
+A: Data is stored in the `.dora/kb/` directory within the project directory. Deleting this directory will remove all data.
+
+**Q: Can I use other LLM models?**\
+A: Yes, you can use any model supported by Ollama. Change the `model_name` parameter in your code.
+
+**Q: Do I need an internet connection?**\
+A: Only for the initial model download. After that, Dora runs completely offline.
+
+**Q: How does RAG improve answers?**\
+A: RAG retrieves relevant information from your documents and includes it in the context when generating answers, making responses more accurate and grounded in your specific documents.
+
+**Q: Can I use Dora without adding documents?**\
+A: Yes, you can use Dora in regular LLM mode without RAG. Just start interactive mode without adding any documents.
+
+## License
+
+This project is open source. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Bug reports and feature requests are welcome via GitHub Issues. Pull requests are also appreciated.
