@@ -1,0 +1,173 @@
+{
+  "evaluation_questions": {
+    "metadata": {
+      "title": "Dora RAG Performance Evaluation Questions",
+      "description": "Questions to evaluate the performance of Dora system with and without RAG",
+      "version": "1.0",
+      "created_date": "2026",
+      "total_questions": 10,
+      "categories": {
+        "general_knowledge": {
+          "count": 5,
+          "description": "Questions that can be answered without RAG using general knowledge",
+          "purpose": "To establish baseline performance"
+        },
+        "project_specific": {
+          "count": 5,
+          "description": "Questions that require project-specific knowledge from the specification document",
+          "purpose": "To evaluate RAG effectiveness in reducing hallucinations"
+        }
+      }
+    },
+    "questions": [
+      {
+        "id": 1,
+        "category": "general_knowledge",
+        "language": "en",
+        "question": "What is the primary purpose of Retrieval-Augmented Generation (RAG) in LLM applications?",
+        "purpose": "To verify the general definition of RAG",
+        "expected_answer_type": "general_knowledge",
+        "evaluation_criteria": "Should provide a general explanation of RAG's purpose in LLM applications"
+      },
+      {
+        "id": 2,
+        "category": "general_knowledge",
+        "language": "en",
+        "question": "What are the security advantages of running a Large Language Model (LLM) locally instead of using cloud-based APIs?",
+        "purpose": "To verify general advantages regarding privacy and security",
+        "expected_answer_type": "general_knowledge",
+        "evaluation_criteria": "Should mention privacy, data security, and local processing benefits"
+      },
+      {
+        "id": 3,
+        "category": "general_knowledge",
+        "language": "en",
+        "question": "In a RAG pipeline, why is \"text chunking\" necessary before converting documents into vectors?",
+        "purpose": "To verify the general necessity of text splitting",
+        "expected_answer_type": "general_knowledge",
+        "evaluation_criteria": "Should explain why chunking is needed (context limits, semantic units, etc.)"
+      },
+      {
+        "id": 4,
+        "category": "general_knowledge",
+        "language": "en",
+        "question": "How does a vector database like ChromaDB help in retrieving relevant information for a query?",
+        "purpose": "To verify the basic principles of vector search",
+        "expected_answer_type": "general_knowledge",
+        "evaluation_criteria": "Should explain similarity search, embeddings, and semantic matching"
+      },
+      {
+        "id": 5,
+        "category": "general_knowledge",
+        "language": "ja",
+        "question": "ローカル環境でLLMを実行する際、プライバシー保護の観点からどのようなメリットがありますか？",
+        "purpose": "To verify the general significance of local execution",
+        "expected_answer_type": "general_knowledge",
+        "evaluation_criteria": "Should mention privacy benefits of local execution"
+      },
+      {
+        "id": 6,
+        "category": "project_specific",
+        "language": "en",
+        "question": "According to the Dora specification, what are the default values for chunk_size and chunk_overlap used by the DocumentProcessor?",
+        "purpose": "To test retrieval of specific numerical values from the specification",
+        "expected_answer_type": "exact_values",
+        "expected_answer": {
+          "chunk_size": "1000 characters",
+          "chunk_overlap": "200 characters"
+        },
+        "evaluation_criteria": "Must provide exact values: 1000 characters and 200 characters"
+      },
+      {
+        "id": 7,
+        "category": "project_specific",
+        "language": "en",
+        "question": "Which specific multilingual embedding model does the Dora project use for generating document vectors?",
+        "purpose": "To test retrieval of specific model name from the specification",
+        "expected_answer_type": "exact_value",
+        "expected_answer": "paraphrase-multilingual-MiniLM-L12-v2",
+        "evaluation_criteria": "Must provide exact model name: paraphrase-multilingual-MiniLM-L12-v2"
+      },
+      {
+        "id": 8,
+        "category": "project_specific",
+        "language": "en",
+        "question": "List the names of the six primary components/classes defined in the Dora system architecture.",
+        "purpose": "To test retrieval of component names from the specification",
+        "expected_answer_type": "list",
+        "expected_answer": [
+          "DocumentProcessor",
+          "VectorStore",
+          "KnowledgeBase",
+          "RAGChain",
+          "LocalLLM",
+          "CLI"
+        ],
+        "evaluation_criteria": "Must list all six components: DocumentProcessor, VectorStore, KnowledgeBase, RAGChain, LocalLLM, and CLI"
+      },
+      {
+        "id": 9,
+        "category": "project_specific",
+        "language": "en",
+        "question": "What is the specific CLI command used to verify the connection and operational status of the local LLM?",
+        "purpose": "To test retrieval of specific CLI command from the specification",
+        "expected_answer_type": "exact_value",
+        "expected_answer": "dora-test",
+        "evaluation_criteria": "Must provide exact command: dora-test"
+      },
+      {
+        "id": 10,
+        "category": "project_specific",
+        "language": "ja",
+        "question": "Doraシステムにおいて、ベクトルデータベースのデータが保存されるデフォルトのディレクトリパスを答えてください。",
+        "purpose": "To test retrieval of specific directory path from the specification",
+        "expected_answer_type": "exact_value",
+        "expected_answer": ".dora/kb",
+        "evaluation_criteria": "Must provide exact path: .dora/kb"
+      }
+    ],
+    "evaluation_instructions": {
+      "with_rag": {
+        "description": "Evaluate answers when RAG is enabled (specification document added to knowledge base)",
+        "steps": [
+          "1. Add the specification document (仕様書.md converted to PDF) to the knowledge base",
+          "2. Start Dora in interactive mode (RAG will be automatically enabled)",
+          "3. Ask each question and record the answer",
+          "4. Compare answers against expected answers for project-specific questions",
+          "5. Note whether RAG helped retrieve accurate information"
+        ]
+      },
+      "without_rag": {
+        "description": "Evaluate answers when RAG is disabled (no documents in knowledge base)",
+        "steps": [
+          "1. Ensure knowledge base is empty (use 'dora clear-kb' if needed)",
+          "2. Start Dora in interactive mode (RAG will be disabled)",
+          "3. Ask each question and record the answer",
+          "4. For general knowledge questions, evaluate if LLM can answer correctly",
+          "5. For project-specific questions, note if LLM hallucinates or cannot answer"
+        ]
+      },
+      "comparison": {
+        "description": "Compare performance with and without RAG",
+        "metrics": [
+          "Accuracy of project-specific answers (should be higher with RAG)",
+          "Presence of hallucinations in project-specific answers (should be lower with RAG)",
+          "Consistency of general knowledge answers (should be similar with/without RAG)",
+          "Ability to provide exact values from specification (only with RAG)"
+        ]
+      }
+    },
+    "scoring_guide": {
+      "project_specific_questions": {
+        "full_credit": "Exact match with expected answer",
+        "partial_credit": "Close approximation or contains key information",
+        "no_credit": "Incorrect answer, hallucination, or 'I don't know'"
+      },
+      "general_knowledge_questions": {
+        "full_credit": "Correct general explanation",
+        "partial_credit": "Partially correct but incomplete",
+        "no_credit": "Incorrect or irrelevant answer"
+      }
+    }
+  }
+}

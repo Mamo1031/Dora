@@ -1,0 +1,264 @@
+================================================================================
+Dora RAG Performance Evaluation Report
+================================================================================
+
+Title: Dora RAG Performance Evaluation Questions
+Version: 1.0
+Total Questions: 10
+
+--------------------------------------------------------------------------------
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+
+Project-Specific Questions (RAG Effectiveness):
+  Average Score (without RAG): 14.00%
+  Average Score (with RAG):    100.00%
+  Improvement:                 +86.00%
+
+Performance Metrics:
+  Time to First Token (TTFT):
+    Without RAG: 0.236s
+    With RAG:    0.131s
+    Difference:  -0.105s
+
+  Total Response Time (Latency):
+    Without RAG: 2.362s
+    With RAG:    1.327s
+    Target:      < 10.0s
+    Status:      ✓ PASS
+
+  RAG Overhead Analysis:
+    Retrieval Time:        0.014s
+    Generation Time (no RAG): 2.362s
+    Generation Time (RAG):     1.314s
+    Total RAG Overhead:    -1.034s
+
+--------------------------------------------------------------------------------
+DETAILED RESULTS
+--------------------------------------------------------------------------------
+
+Project Specific Questions:
+
+Question 6:
+  According to the Dora specification, what are the default values for chunk_size and chunk_overlap used by the DocumentProcessor?
+
+  Without RAG:
+    Answer: I'm not able to find any information about a 'Dora specification'. Can you provide more context or clarify which Dora you are referring to?
+
+However, I can tell you that `chunk_size` and `chunk_overla...
+    TTFT:   0.116s
+    Total:  1.157s
+
+  With RAG:
+    Answer: According to the Dora specification, the default values for chunk_size and chunk_overlap used by the DocumentProcessor are:
+
+* chunk_size: 1000 characters
+* chunk_overlap: 200 characters...
+    Score:  100.00%
+    TTFT:        0.076s
+    Retrieval:   0.015s
+    Generation:  0.764s
+    Total:       0.780s
+    Score Improvement: +100.00%
+
+  Expected: {'chunk_size': '1000 characters', 'chunk_overlap': '200 characters'}
+
+--------------------------------------------------------------------------------
+
+Question 7:
+  Which specific multilingual embedding model does the Dora project use for generating document vectors?
+
+  Without RAG:
+    Answer: I can't find any information on a "Dora project" that uses a multilingual embedding model to generate document vectors. Could you please provide more context or clarify what the Dora project is? I'll ...
+    Score:  20.00%
+    TTFT:   0.062s
+    Total:  0.623s
+
+  With RAG:
+    Answer: The Dora project uses the "paraphrase-multilingual-MiniLM-L12-v2" model from sentence-transformers for generating document vectors, specifically embeddings, not exactly a "multilingual embedding model...
+    Score:  100.00%
+    TTFT:        0.093s
+    Retrieval:   0.014s
+    Generation:  0.933s
+    Total:       0.947s
+    Score Improvement: +80.00%
+    RAG Overhead: +0.324s
+
+  Expected: paraphrase-multilingual-MiniLM-L12-v2
+
+--------------------------------------------------------------------------------
+
+Question 8:
+  List the names of the six primary components/classes defined in the Dora system architecture.
+
+  Without RAG:
+    Answer: The DORA system architecture is not a widely recognized or established framework. However, I believe you may be referring to the DORA (Designate, Operate, Monitor, Analyze) framework, which is a widel...
+    TTFT:   0.103s
+    Total:  1.033s
+
+  With RAG:
+    Answer: The six primary components/classes defined in the Dora system architecture are:
+
+1. DocumentProcessor (document.py)
+2. VectorStore (vectorstore.py)
+3. KnowledgeBase (knowledge_base.py)
+4. RAGChain (ra...
+    Score:  100.00%
+    TTFT:        0.095s
+    Retrieval:   0.014s
+    Generation:  0.946s
+    Total:       0.959s
+    Score Improvement: +100.00%
+
+  Expected: ['DocumentProcessor', 'VectorStore', 'KnowledgeBase', 'RAGChain', 'LocalLLM', 'CLI']
+
+--------------------------------------------------------------------------------
+
+Question 9:
+  What is the specific CLI command used to verify the connection and operational status of the local LLM?
+
+  Without RAG:
+    Answer: I'm not able to find any information about a "CLI command" for verifying the connection and operational status of a local Large Language Model (LLM). It's possible that you may be referring to a speci...
+    TTFT:   0.115s
+    Total:  1.146s
+
+  With RAG:
+    Answer: The specific CLI command used to verify the connection and operational status of the local LLM is `dora-test`....
+    Score:  100.00%
+    TTFT:        0.054s
+    Retrieval:   0.014s
+    Generation:  0.545s
+    Total:       0.559s
+    Score Improvement: +100.00%
+
+  Expected: dora-test
+
+--------------------------------------------------------------------------------
+
+Question 10:
+  Doraシステムにおいて、ベクトルデータベースのデータが保存されるデフォルトのディレクトリパスを答えてください。
+
+  Without RAG:
+    Answer: Doraシステムでベクトルデータベースのデータが保存されるデフォルトのディレクトリパスは、 /user/dora/basedir です。
+
+このディレクトリは、ベクトルデータベースのデータがストアされます。...
+    Score:  50.00%
+    TTFT:   0.067s
+    Total:  0.672s
+
+  With RAG:
+    Answer: Doraシステムでベクトルデータベースのデータが保存されるデフォルトのディレクトリパスは、`.dora/kb` です。...
+    Score:  100.00%
+    TTFT:        0.074s
+    Retrieval:   0.015s
+    Generation:  0.742s
+    Total:       0.757s
+    Score Improvement: +50.00%
+    RAG Overhead: +0.085s
+
+  Expected: .dora/kb
+
+--------------------------------------------------------------------------------
+
+General Knowledge Questions:
+
+Question 1:
+  What is the primary purpose of Retrieval-Augmented Generation (RAG) in LLM applications?
+
+  Without RAG:
+    Answer: Retrieval-Augmented Generation (RAG) is a technique used in Large Language Models (LLMs) to improve their performance on specific tasks. The primary purpose of RAG is to retrieve relevant information ...
+    TTFT:   0.263s
+    Total:  2.631s
+
+  With RAG:
+    Answer: I don't know, but I can try to provide some context. According to the provided specification.md, RAG stands for Retrieval-Augmented Generation, which is a technique used in Language Model Applications...
+    TTFT:        0.260s
+    Retrieval:   0.016s
+    Generation:  2.605s
+    Total:       2.621s
+
+--------------------------------------------------------------------------------
+
+Question 2:
+  What are the security advantages of running a Large Language Model (LLM) locally instead of using cloud-based APIs?
+
+  Without RAG:
+    Answer: Running a Large Language Model (LLM) locally instead of using cloud-based APIs has several security advantages:
+
+1. **Data Localization**: By hosting an LLM locally, you can store and process sensitiv...
+    TTFT:   0.481s
+    Total:  4.810s
+
+  With RAG:
+    Answer: Based on the provided context, I don't have information about the specific security advantages of running a Large Language Model (LLM) locally compared to cloud-based APIs. The text does mention "Conn...
+    TTFT:        0.109s
+    Retrieval:   0.013s
+    Generation:  1.090s
+    Total:       1.103s
+
+--------------------------------------------------------------------------------
+
+Question 3:
+  In a RAG pipeline, why is "text chunking" necessary before converting documents into vectors?
+
+  Without RAG:
+    Answer: Text Chunking in a RAG (Relevance-based Automatic Retrieval) pipeline is necessary before converting documents into vectors for several reasons:
+
+1. **Contextual Understanding**: Text chunking helps t...
+    TTFT:   0.372s
+    Total:  3.724s
+
+  With RAG:
+    Answer: Based on the provided context, I can answer that text chunking is necessary in a RAG (Retrieval-Augmentation-Generation) pipeline to process large PDF files efficiently. The context mentions Recursive...
+    TTFT:        0.218s
+    Retrieval:   0.013s
+    Generation:  2.180s
+    Total:       2.194s
+
+--------------------------------------------------------------------------------
+
+Question 4:
+  How does a vector database like ChromaDB help in retrieving relevant information for a query?
+
+  Without RAG:
+    Answer: A vector database like ChromaDB plays a crucial role in efficiently retrieving relevant information for queries by leveraging vector similarity search. Here's how it works:
+
+1. **Vector Embeddings**: ...
+    TTFT:   0.428s
+    Total:  4.284s
+
+  With RAG:
+    Answer: A vector database like ChromaDB helps in retrieving relevant information for a query by storing and managing vectors (dense representations of text) that can be used to compare with query vectors. Thi...
+    TTFT:        0.094s
+    Retrieval:   0.012s
+    Generation:  0.944s
+    Total:       0.956s
+
+--------------------------------------------------------------------------------
+
+Question 5:
+  ローカル環境でLLMを実行する際、プライバシー保護の観点からどのようなメリットがありますか？
+
+  Without RAG:
+    Answer: LLM（Large Language Model）をローカル環境で実行する場合、プライバシー保護の観点から以下のメリットがあります。
+
+1. **データ収集と分析の制限**: ローカル環境では、機器がインターネットやCloudにアクセスしてデータを収集し、分析を行う必要がないため、機密情報が外部に漏洩する可能性は低いです。
+2. **セキュリティ**: ローカル環境では、データが機器内に保存される...
+    TTFT:   0.354s
+    Total:  3.538s
+
+  With RAG:
+    Answer: ローカル環境でLLM（_large language model）を実行する際に、プライバシー保護の観点から以下のメリットがあります。
+
+1. インターネット接続なし：ローカル環境では、インターネット接続は必要ありません。つまり、データが外部で保存されることなく、LLMを使用できます。
+2.  データ送信防止：ローカル環境では、データは外部に送信されません。これにより、データのプライバシーとセキュ...
+    TTFT:        0.239s
+    Retrieval:   0.012s
+    Generation:  2.386s
+    Total:       2.398s
+
+--------------------------------------------------------------------------------
+
+================================================================================
+End of Report
+================================================================================
